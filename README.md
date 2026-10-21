@@ -48,8 +48,49 @@ Wi-Fi и пароль. Флеш меняется только на шаге 5.
 - **USB-UART на 3,3 В** (CP2102, CH340 с перемычкой на 3,3 В, FT232). 5 В на линиях данных повредят процессор.
 - **Паяльник, флюс, три тонких провода** (МГТФ или жилка витой пары).
 - **microSD** до 32 ГБ, FAT32.
-- **Компьютер с Python 3** и `pip install pyserial`. Скрипты — в папке [`tools/`](tools) этого репозитория.
+- **Компьютер с Python 3** (Windows или Linux) — подготовка ниже, в «Как запускать скрипты».
   Программатор флеша (CH341A) **не поможет**: на плате флеш не читается, программатор запитывает через него всю плату.
+
+### Как запускать скрипты
+
+**1. Python 3.8 или новее.**
+- Windows: установщик с <https://www.python.org/downloads/windows/>, при установке отметить
+  **«Add python.exe to PATH»**. Или одной командой в PowerShell: `winget install Python.Python.3.12`.
+- Linux (Debian/Ubuntu): `sudo apt install python3 python3-pip` (обычно Python уже стоит).
+- Проверка: `python --version` (Windows) или `python3 --version` (Linux).
+
+**2. Библиотека pyserial** (работа с COM-портом):
+- Windows: `python -m pip install pyserial`
+- Linux: `sudo apt install python3-serial` (или `python3 -m pip install --user pyserial`)
+
+**3. Скрипты.** На этой странице: Code → **Download ZIP**, распаковать, например, в `C:\mjsxj08cm` или
+`~/mjsxj08cm`. Или `git clone https://github.com/jajest/openipc-mjsxj08cm-releases`. Все команды ниже
+выполняются **из этой папки** (в ней лежит `tools/`).
+
+**4. Порт адаптера.**
+- Windows: «Диспетчер устройств» → «Порты (COM и LPT)» → например `Silicon Labs CP210x … (COM11)`. Порта нет —
+  поставить драйвер адаптера (CP210x — с сайта Silicon Labs, CH340 — с сайта WCH).
+- Linux: `ls /dev/ttyUSB*` после подключения адаптера, обычно `/dev/ttyUSB0`. Доступ к порту без sudo:
+  `sudo usermod -aG dialout $USER`, затем выйти из системы и зайти снова.
+
+**5. Запуск:**
+
+| | Windows (PowerShell или cmd) | Linux (терминал) |
+|---|---|---|
+| перейти в папку | `cd C:\mjsxj08cm` | `cd ~/mjsxj08cm` |
+| вход в U-Boot | `python tools\uart_break.py COM11` | `python3 tools/uart_break.py /dev/ttyUSB0` |
+| терминал | `python tools\uart_term.py COM11` | `python3 tools/uart_term.py /dev/ttyUSB0` |
+| копия флеша | `python tools\uart_dump.py flash-stock.bin --port COM11` | `python3 tools/uart_dump.py flash-stock.bin --port /dev/ttyUSB0` |
+| запуск в ОЗУ | `python tools\uart_ramboot.py --cmds boot.txt --port COM11` | `python3 tools/uart_ramboot.py --cmds boot.txt --port /dev/ttyUSB0` |
+
+Дальше команды записаны для Windows (`python`, `COM11`); в Linux — `python3` и `/dev/ttyUSB0`. Порт занимает только
+одна программа: перед запуском скрипта закрыть PuTTY и другие терминалы. Остановить скрипт — Ctrl+C.
+
+| ошибка | что делать |
+|---|---|
+| `'python' не является…` / `command not found` | Python не в PATH: переустановить с галочкой «Add to PATH» (Windows) или набрать `python3` (Linux) |
+| `No module named 'serial'` | не поставлен pyserial (пункт 2) |
+| `could not open port 'COM11'` / `Permission denied` | неверный номер порта, порт занят другой программой или (Linux) нет группы `dialout` |
 
 ## 2. UART
 
