@@ -3,6 +3,11 @@
 Сборки [OpenIPC](https://github.com/OpenIPC/firmware) для камеры Xiaomi Mi Home Security Camera 360° 1080p
 **MJSXJ08CM** (SigmaStar SSC323, датчик JX-F37, Wi-Fi SSW101B).
 
+**Скачать:** раздел [Releases](https://github.com/jajest/openipc-mjsxj08cm-releases/releases) (справа на главной
+странице репозитория) → [последний релиз](https://github.com/jajest/openipc-mjsxj08cm-releases/releases/latest) →
+Assets. Прошивка не лежит среди файлов репозитория — только в релизах. Прямая ссылка на последнюю:
+<https://github.com/jajest/openipc-mjsxj08cm-releases/releases/latest/download/openipc-mjsxj08cm.tgz>.
+
 Файлы релиза:
 
 | файл | зачем |
