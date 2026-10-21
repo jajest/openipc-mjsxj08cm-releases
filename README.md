@@ -332,6 +332,13 @@ QR-коды не читаются.
   `onvif.username` и `onvif.password`.
 - Поворот по ONVIF не работает: `http://<адрес>:8080/cgi-bin/ptz?left=20|right=20|center|home|goto=<0–288>|pos`
   (пароль root) или страница Camera → Xiaomi.
+- Wi-Fi меняется QR-кодом, `wifi.txt` или кнопкой на корпусе (шаг 6), а не на странице «Система → Сеть». Предупреждения
+  там «Беспроводной адаптер не задан» и «Настройки ждут перезагрузки» — нормальны: Wi-Fi поднимает свой скрипт сборки.
+  Поле «Адаптер» не менять.
+
+Страница **Камера → Xiaomi**: поворот, день/ночь и ИК, звук, детекторы, сброс Wi-Fi.
+
+![Страница Камера → Xiaomi](img/webui-xiaomi.png)
 
 HTTP Majestic, порт 80, basic-auth root:
 
@@ -360,8 +367,12 @@ ffmpeg -i say.mp3 -f s16le -ar 8000 -ac 1 - | curl -s -u root:<пароль> --d
 Адрес последнего релиза прописан в образе (`/etc/uboot-env.bin`, не сектор U-Boot):
 `upgrade=https://github.com/jajest/openipc-mjsxj08cm-releases/releases/latest/download/openipc-mjsxj08cm.tgz`.
 
-- Веб-интерфейс: «Прошивка» → **Install** (последний релиз) или «Install this file» с архивом. «Reset config» **не
-  ставить** — сотрёт пароли и Wi-Fi. «Reflash even if the same version» — только для повторной установки той же сборки.
+- Веб-интерфейс: «Система → Обновление». Есть новый релиз — кнопка **Установить** (Install) в верхней карточке; уже
+  последний — там «Переустановить». Свой архив — «Установить из файла». «Reset config» в «Дополнительных параметрах»
+  **не ставить** — сотрёт пароли и Wi-Fi. «Автообновления» оставить выключенными (OFF).
+
+  ![Страница Система → Обновление](img/webui-update.png)
+
 - SSH: `sysupgrade -k -r -z` (последний релиз) или `sysupgrade -k -r -z --archive=/tmp/openipc-mjsxj08cm.tgz`.
 - **Не включать «Automatic updates» и не делать Factory reset.** Автообновление ставит типовые сборки, с которыми
   камера не загрузится. Factory reset стирает overlay: пароль, настройки и Wi-Fi (сеть потом — по QR-коду).
